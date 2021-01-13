@@ -1,29 +1,64 @@
 import pygame
+import sys
 import copy
 import os
 
+
 square = 30
-spriteRatio = 3 / 2
+top = 10
+left = 10
 dir = 0
 v = 120
 k = 0
+gameBoard = []
 clock = pygame.time.Clock()
+
+lvls = [[[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                     [1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
+                     [1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
+                     [1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
+                     [1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                     [1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1],
+                     [1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1],
+                     [1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1],
+                     [1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1],
+                     [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1],
+                     [1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1],
+                     [1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1],
+                     [1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1],
+                     [1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1],
+                     [1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1],
+                     [1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1],
+                     [1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1],
+                     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
+                     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]]
+
+pygame.init()
+size = width, height = 620, 620
+screen = pygame.display.set_mode(size)
+
+
+wall_sprites = pygame.sprite.Group()
+fl_sprites = pygame.sprite.Group()
+
 
 def load_image(name, colorkey=None):
     fullname = os.path.join('data', name)
-    try:
-        image = pygame.image.load(fullname)
-    except Exception:
-        print('Файл не найден')
-        return False
-    if colorkey is not None:
-        image = image.convert()
-        if colorkey == -1:
-            colorkey = image.get_at(())
-        image.set_colorkey()
-    else:
-        image = image.convert_alpha()
+    # если файл не существует, то выходим
+    if not os.path.isfile(fullname):
+        print(f"Файл с изображением '{fullname}' не найден")
+        sys.exit()
+    image = pygame.image.load(fullname)
     return image
+
+
+def canMove(row, col):
+    if col == -1 or col == len(gameBoard[0]):
+        return True
+    if gameBoard[int(row)][int(col)] != 1:
+        return True
+    return False
 
 
 class Pacman:
@@ -33,7 +68,7 @@ class Pacman:
         self.dir = 0
 
     def draw(self):
-        pygame.draw.circle(screen, (255, 255, 255), (self.row * square + square // 2, self.col * square + square // 2),
+        pygame.draw.circle(screen, (255, 255, 255), (self.row * square + square // 2 + left, self.col * square + square // 2 + top),
                            square // 4)
 
     def update(self):
@@ -54,59 +89,48 @@ class Pacman:
                 self.col -= 1
 
 
-originalGameBoard = [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-                     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                     [1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
-                     [1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
-                     [1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
-                     [1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                     [1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1],
-                     [1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1],
-                     [1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1],
-                     [1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1],
-                     [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1],
-                     [1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1],
-                     [1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1],
-                     [1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1],
-                     [1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1],
-                     [1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1],
-                     [1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1],
-                     [1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1],
-                     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
-                     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]
-gameBoard = copy.deepcopy(originalGameBoard)
+class Game:
+    # создание поля
+    def __init__(self, lvl):
+        global gameBoard
+        self.width = 20
+        self.height = 20
+        self.left = left
+        self.top = top
+        self.cell_size = square
+        self.current_lvl = lvl - 1
+        gameBoard = copy.deepcopy(lvls[self.current_lvl])
 
-(width, height) = (len(gameBoard) * square, len(gameBoard[0]) * square)
-screen = pygame.display.set_mode((width, height))
-
-
-def renderBoard():
-    screen.fill((0, 0, 0))
-    for i in range(len(gameBoard)):
-        for j in range(len(gameBoard[0])):
-            if gameBoard[i][j] == 1:
-                pygame.draw.rect(screen, (0, 0, 255), (j * square, i * square, square, square))
-            elif gameBoard[i][j] == 0:
-                pass
-                # pygame.draw.circle(screen, (255, 255, 255), (j * square + square // 2, i * square + square // 2),
-                # square // 8)
-
-    pygame.display.update()
+    def render(self):
+        im_fl = load_image('floor3.png')
+        im_fl = pygame.transform.scale(im_fl, (30, 30))
+        im_wall = load_image('wall.png')
+        im_wall = pygame.transform.scale(im_wall, (30, 30))
+        for y in range(self.height):
+            for x in range(self.width):
+                if gameBoard[x][y] == 0:
+                    fl = pygame.sprite.Sprite()
+                    fl.image = im_fl
+                    fl.rect = fl.image.get_rect()
+                    fl.rect.x = x * self.cell_size + self.left
+                    fl.rect.y = y * self.cell_size + self.top
+                    fl_sprites.add(fl)
+                elif gameBoard[x][y] == 1:
+                    wall = pygame.sprite.Sprite()
+                    wall.image = im_wall
+                    wall.rect = wall.image.get_rect()
+                    wall.rect.x = x * self.cell_size + self.left
+                    wall.rect.y = y * self.cell_size + self.top
+                    wall_sprites.add(wall)
 
 
-def canMove(row, col):
-    if col == -1 or col == len(gameBoard[0]):
-        return True
-    if gameBoard[int(row)][int(col)] != 1:
-        return True
-    return False
-
-
+game = Game(1)
 pacman = Pacman(1, 1)
 running = True
+game.render()
 while running:
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+        if event.type == pygame.QUIT and pygame.key.get_pressed() :
             running = False
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_w:
@@ -117,11 +141,12 @@ while running:
                 dir = 2
             elif event.key == pygame.K_a:
                 dir = 3
-        k += v * clock.tick() / 1000
-        renderBoard()
-        pacman.draw()
-        if k >= 30:
-            pacman.update()
-            k = 0
-        pygame.display.flip()
-
+    screen.fill((0, 0, 0))
+    fl_sprites.draw(screen)
+    wall_sprites.draw(screen)
+    pacman.draw()
+    k += v * clock.tick() / 1000
+    if k >= 30:
+        pacman.update()
+        k = 0
+    pygame.display.flip()
