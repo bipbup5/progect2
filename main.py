@@ -9,13 +9,15 @@ top = 10
 left = 10
 dir = 0
 v = 270
+u = 0
 k = 0
 res = 0
+nres = 0
 gameBoard = []
 clock = pygame.time.Clock()
-
+g_coords = []
 lvls = [[[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-         [1, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+         [1, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 1],
          [1, 2, 1, 2, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1],
          [1, 2, 1, 2, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1],
          [1, 2, 1, 2, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1],
@@ -31,9 +33,71 @@ lvls = [[[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
          [1, 2, 1, 2, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1],
          [1, 2, 1, 2, 2, 2, 2, 2, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1],
          [1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1],
-         [1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 1, 1, 1],
-         [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1],
-         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]]
+         [1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 1, 1, 1],
+         [1, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 1, 1, 1, 1, 1, 1, 1, 1],
+         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]],
+        [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+         [1, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1],
+         [1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 1, 1],
+         [1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 1, 2, 1, 1],
+         [1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 2, 1, 1, 2, 2, 2, 3, 1],
+         [1, 1, 2, 1, 2, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 2, 1, 1, 2, 1],
+         [1, 1, 2, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1],
+         [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 1],
+         [1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 2, 1],
+         [1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 2, 1],
+         [1, 2, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 1],
+         [1, 2, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1, 2, 1, 1, 2, 1],
+         [1, 2, 2, 2, 2, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1, 2, 1, 1, 2, 1],
+         [1, 2, 1, 1, 1, 2, 1, 1, 2, 2, 1, 1, 2, 2, 1, 2, 1, 1, 2, 1],
+         [1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1],
+         [1, 2, 1, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 1, 1, 2, 1, 1, 2, 1],
+         [1, 2, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 2, 2, 3, 1],
+         [1, 2, 2, 2, 1, 1, 3, 2, 2, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1],
+         [1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 1, 1, 1, 1],
+         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]],
+        [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+         [1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+         [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 1, 1],
+         [1, 2, 1, 1, 1, 2, 1, 2, 1, 2, 1, 1, 1, 2, 1, 2, 1, 2, 1, 1],
+         [1, 2, 2, 2, 2, 2, 1, 2, 1, 2, 2, 2, 2, 2, 1, 2, 1, 2, 1, 1],
+         [1, 2, 1, 1, 1, 2, 1, 2, 1, 2, 1, 1, 1, 2, 1, 2, 1, 2, 1, 1],
+         [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1],
+         [1, 2, 1, 2, 1, 2, 1, 1, 1, 2, 1, 2, 1, 2, 1, 1, 1, 2, 1, 1],
+         [1, 2, 1, 2, 1, 2, 2, 2, 2, 2, 1, 2, 1, 2, 2, 2, 2, 2, 1, 1],
+         [1, 2, 1, 2, 1, 2, 1, 1, 1, 2, 1, 2, 1, 2, 1, 1, 1, 2, 1, 1],
+         [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1],
+         [1, 2, 1, 1, 1, 2, 1, 2, 1, 2, 1, 1, 1, 2, 1, 2, 1, 2, 1, 1],
+         [1, 2, 2, 2, 2, 2, 1, 2, 1, 2, 2, 2, 2, 2, 1, 2, 1, 2, 1, 1],
+         [1, 2, 1, 1, 1, 2, 1, 2, 1, 2, 1, 1, 1, 2, 1, 2, 1, 2, 1, 1],
+         [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 1, 1],
+         [1, 2, 1, 2, 1, 2, 1, 1, 1, 2, 1, 2, 1, 2, 1, 1, 1, 2, 1, 1],
+         [1, 2, 1, 2, 1, 2, 2, 2, 2, 2, 1, 2, 1, 2, 2, 2, 2, 2, 1, 1],
+         [1, 2, 1, 2, 1, 2, 1, 1, 1, 2, 1, 2, 1, 2, 1, 1, 1, 2, 1, 1],
+         [1, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 1, 1],
+         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]],
+        [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [1, 2, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 2, 1],
+            [1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1],
+            [1, 2, 1, 2, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 2, 1, 2, 1],
+            [1, 2, 1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 2, 1],
+            [1, 2, 1, 2, 1, 2, 1, 1, 1, 0, 0, 1, 1, 1, 2, 1, 2, 1, 2, 1],
+            [1, 2, 1, 2, 1, 2, 1, 3, 2, 2, 2, 2, 3, 1, 2, 1, 2, 1, 2, 1],
+            [1, 2, 1, 2, 1, 2, 1, 2, 1, 1, 1, 1, 2, 1, 2, 1, 2, 1, 2, 1],
+            [1, 2, 0, 2, 0, 2, 0, 2, 1, 1, 1, 1, 2, 0, 2, 0, 2, 0, 2, 1],
+            [1, 2, 0, 2, 0, 2, 0, 2, 1, 1, 1, 1, 2, 0, 2, 0, 2, 0, 2, 1],
+            [1, 2, 1, 2, 1, 2, 1, 2, 1, 1, 1, 1, 2, 1, 2, 1, 2, 1, 2, 1],
+            [1, 2, 1, 2, 1, 2, 1, 3, 2, 2, 2, 2, 3, 1, 2, 1, 2, 1, 2, 1],
+            [1, 2, 1, 2, 1, 2, 1, 1, 1, 0, 0, 1, 1, 1, 2, 1, 2, 1, 2, 1],
+            [1, 2, 1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 2, 1],
+            [1, 2, 1, 2, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 2, 1, 2, 1],
+            [1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1],
+            [1, 2, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 2, 1],
+            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]]
+
 pygame.init()
 size = width, height = 620, 620
 screen = pygame.display.set_mode(size)
@@ -73,6 +137,7 @@ class Pacman:
         pac_sprites.add(self.pac_sprite)
         self.pac_sprite.image = self.im
         self.pac_sprite.rect = self.pac_sprite.image.get_rect()
+        self.pac_sprite.mask = pygame.mask.from_surface(self.im)
         self.draw()
 
     def draw(self):
@@ -84,11 +149,10 @@ class Pacman:
             self.pac_sprite.image = pygame.transform.flip(pygame.transform.rotate(self.im, 270), True, False)
         elif dir == 3:
             self.pac_sprite.image = pygame.transform.flip(pygame.transform.rotate(self.im, 180), False, True)
+
         self.pac_sprite.rect.x = self.row * square + square // 2 + left - 10
         self.pac_sprite.rect.y = self.col * square + square // 2 + top - 10
         pac_sprites.draw(screen)
-        # pygame.draw.circle(screen, (255, 255, 255), (self.row * square + square // 2 + left, self.col * square + square // 2 + top),
-        #                    square // 4)
 
     def update(self):
         global dot_sprites, res
@@ -134,8 +198,16 @@ class Pacman:
 
 
 class Ghosts:
-    def __init__(self, row, col):
-        im = load_image('g_red.png')
+    def __init__(self, row, col, color):
+        if color == 'red':
+            im = load_image('g_red.png')
+        elif color == 'blue':
+            im = load_image('g_blue.png')
+        elif color == 'orange':
+            im = load_image('g_orange.png')
+        elif color == 'white':
+            im = load_image('g_white.png')
+
         im = pygame.transform.scale(im, (20, 20))
         self.row = row
         self.col = col
@@ -144,6 +216,7 @@ class Ghosts:
         self.dir_g = choice((0, 1, 2, 3))
         self.g_sprite.image = im
         self.g_sprite.rect = self.g_sprite.image.get_rect()
+        self.g_sprite.mask = pygame.mask.from_surface(im)
         self.draw()
 
     def draw(self):
@@ -155,6 +228,7 @@ class Ghosts:
         global running
         for elem in pac_sprites:
             if pygame.sprite.collide_mask(self.g_sprite, elem):
+                pass
                 running = False
 
         if self.dir_g == 3:
@@ -212,22 +286,24 @@ class Ghosts:
     def if_turn(self):
         if self.col % 1 == 0 and self.row % 1 == 0:
             if self.dir_g == 3:
-                if gameBoard[int(self.row)][int(self.col) + 1] in [0, 2] or gameBoard[int(self.row)][int(self.col) - 1] in [0, 2]:
+                if gameBoard[int(self.row)][int(self.col) + 1] in [0, 2] or gameBoard[int(self.row)][
+                    int(self.col) - 1] in [0, 2]:
                     self.dir_g = choice((0, 2, 3))
 
             elif self.dir_g == 2:
-                if gameBoard[int(self.row) + 1][int(self.col)] in [0, 2] or gameBoard[int(self.row) - 1][int(self.col)] in [0, 2]:
+                if gameBoard[int(self.row) + 1][int(self.col)] in [0, 2] or gameBoard[int(self.row) - 1][
+                    int(self.col)] in [0, 2]:
                     self.dir_g = choice((1, 2, 3))
 
             elif self.dir_g == 1:
-                if gameBoard[int(self.row)][int(self.col) + 1] in [0, 2] or gameBoard[int(self.row)][int(self.col) - 1] in [0, 2]:
+                if gameBoard[int(self.row)][int(self.col) + 1] in [0, 2] or gameBoard[int(self.row)][
+                    int(self.col) - 1] in [0, 2]:
                     self.dir_g = choice((0, 1, 2))
 
             elif self.dir_g == 0:
-                if gameBoard[int(self.row) + 1][int(self.col)] in [0, 2] or gameBoard[int(self.row) - 1][int(self.col)] in [0, 2]:
+                if gameBoard[int(self.row) + 1][int(self.col)] in [0, 2] or gameBoard[int(self.row) - 1][
+                    int(self.col)] in [0, 2]:
                     self.dir_g = choice((0, 1, 3))
-
-
 
 
 class Game:
@@ -243,6 +319,8 @@ class Game:
         gameBoard = copy.deepcopy(lvls[self.current_lvl])
 
     def render(self):
+        global g_coords, nres
+        screen.fill((0, 0, 0))
         im_fl = load_image('floor3.png')
         im_fl = pygame.transform.scale(im_fl, (30, 30))
         im_wall = load_image('wall.png')
@@ -251,6 +329,14 @@ class Game:
         im_dot = pygame.transform.scale(im_dot, (20, 20))
         for y in range(self.height):
             for x in range(self.width):
+                if gameBoard[x][y] == 3:
+                    fl = pygame.sprite.Sprite()
+                    fl.image = im_fl
+                    fl.rect = fl.image.get_rect()
+                    fl.rect.x = x * self.cell_size + self.left
+                    fl.rect.y = y * self.cell_size + self.top
+                    fl_sprites.add(fl)
+                    g_coords.append((x, y))
                 if gameBoard[x][y] == 0:
                     fl = pygame.sprite.Sprite()
                     fl.image = im_fl
@@ -278,17 +364,22 @@ class Game:
                     dot.rect.x = x * self.cell_size + self.left + 5
                     dot.rect.y = y * self.cell_size + self.top + 5
                     dot_sprites.add(dot)
+                    nres += 1
 
 
 game = Game(1)
+
+i = 1
+
+game.render()
 pacman = Pacman(1, 1)
-ghost = Ghosts(5, 1)
-ghost2 = Ghosts(6, 1)
-ghost3 = Ghosts(7, 1)
-ghost4 = Ghosts(8, 1)
+ghost = Ghosts(g_coords[0][0], g_coords[0][1], 'red')
+ghost2 = Ghosts(g_coords[1][0], g_coords[1][1], 'blue')
+ghost3 = Ghosts(g_coords[2][0], g_coords[2][1], 'white')
+ghost4 = Ghosts(g_coords[3][0], g_coords[3][1], 'orange')
 
 running = True
-game.render()
+
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT and pygame.key.get_pressed():
@@ -311,12 +402,36 @@ while running:
     ghost2.draw()
     ghost3.draw()
     ghost4.draw()
-    k += v * clock.tick() / 1000
+    d = v * clock.tick() / 1000
+    k += d
+    u += d
     if k >= 30:
         pacman.update()
+        k = 0
+
+    if u >= 30:
         ghost.update()
         ghost2.update()
         ghost3.update()
         ghost4.update()
-        k = 0
+        u = 0
+    if res == nres:
+        i += 1
+        game = Game(i)
+        screen.fill((0, 0, 0))
+        wall_sprites = pygame.sprite.Group()
+        fl_sprites = pygame.sprite.Group()
+        pac_sprites = pygame.sprite.Group()
+        dot_sprites = pygame.sprite.Group()
+        g_sprites = pygame.sprite.Group()
+        g_coords = []
+        pygame.display.flip()
+        game.render()
+        pacman = Pacman(1, 1)
+        ghost = Ghosts(g_coords[0][0], g_coords[0][1], 'red')
+        ghost2 = Ghosts(g_coords[1][0], g_coords[1][1], 'blue')
+        ghost3 = Ghosts(g_coords[2][0], g_coords[2][1], 'white')
+        ghost4 = Ghosts(g_coords[3][0], g_coords[3][1], 'orange')
+        nres = 0
+        res = 0
     pygame.display.flip()
