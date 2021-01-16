@@ -8,31 +8,31 @@ square = 30
 top = 10
 left = 10
 dir = 0
-v = 360
+v = 270
 k = 0
 gameBoard = []
 clock = pygame.time.Clock()
 
 lvls = [[[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-                     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                     [1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
-                     [1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
-                     [1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
-                     [1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                     [1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1],
-                     [1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1],
-                     [1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1],
-                     [1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1],
-                     [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1],
-                     [1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1],
-                     [1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1],
-                     [1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1],
-                     [1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1],
-                     [1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1],
-                     [1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1],
-                     [1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1],
-                     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
-                     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]]
+        [1, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+        [1, 2, 1, 2, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1],
+        [1, 2, 1, 2, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1],
+        [1, 2, 1, 2, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1],
+        [1, 2, 1, 2, 1, 1, 1, 1, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+        [1, 2, 1, 2, 2, 2, 2, 2, 2, 1, 1, 2, 1, 2, 1, 1, 2, 1, 1, 1],
+        [1, 2, 1, 2, 1, 2, 1, 1, 2, 1, 1, 2, 1, 2, 1, 1, 2, 1, 1, 1],
+        [1, 2, 1, 2, 1, 2, 1, 1, 2, 1, 1, 2, 1, 2, 2, 2, 2, 2, 1, 1],
+        [1, 2, 1, 2, 1, 2, 1, 1, 2, 1, 1, 2, 1, 2, 1, 1, 1, 2, 1, 1],
+        [1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 1, 1, 2, 1, 1],
+        [1, 2, 1, 2, 1, 2, 1, 1, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 1, 1],
+        [1, 2, 2, 2, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1],
+        [1, 2, 1, 2, 1, 2, 1, 1, 2, 2, 2, 2, 2, 2, 1, 1, 2, 1, 1, 1],
+        [1, 2, 1, 2, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1],
+        [1, 2, 1, 2, 2, 2, 2, 2, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1],
+        [1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1],
+        [1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 1, 1, 1],
+        [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]]
 
 pygame.init()
 size = width, height = 620, 620
@@ -42,6 +42,7 @@ screen = pygame.display.set_mode(size)
 wall_sprites = pygame.sprite.Group()
 fl_sprites = pygame.sprite.Group()
 pac_sprites = pygame.sprite.Group()
+dot_sprites = pygame.sprite.Group()
 
 
 def load_image(name, colorkey=None):
@@ -132,6 +133,8 @@ class Game:
         im_fl = pygame.transform.scale(im_fl, (30, 30))
         im_wall = load_image('wall.png')
         im_wall = pygame.transform.scale(im_wall, (30, 30))
+        im_dot = load_image('dot.png')
+        im_dot = pygame.transform.scale(im_dot, (20, 20))
         for y in range(self.height):
             for x in range(self.width):
                 if gameBoard[x][y] == 0:
@@ -148,6 +151,20 @@ class Game:
                     wall.rect.x = x * self.cell_size + self.left
                     wall.rect.y = y * self.cell_size + self.top
                     wall_sprites.add(wall)
+                elif gameBoard[x][y] == 2:
+                    fl = pygame.sprite.Sprite()
+                    fl.image = im_fl
+                    fl.rect = fl.image.get_rect()
+                    fl.rect.x = x * self.cell_size + self.left
+                    fl.rect.y = y * self.cell_size + self.top
+                    fl_sprites.add(fl)
+
+                    dot = pygame.sprite.Sprite()
+                    dot.image = im_dot
+                    dot.rect = dot.image.get_rect()
+                    dot.rect.x = x * self.cell_size + self.left + 5
+                    dot.rect.y = y * self.cell_size + self.top + 5
+                    dot_sprites.add(dot)
 
 
 game = Game(1)
@@ -156,7 +173,7 @@ running = True
 game.render()
 while running:
     for event in pygame.event.get():
-        if event.type == pygame.QUIT and pygame.key.get_pressed() :
+        if event.type == pygame.QUIT and pygame.key.get_pressed():
             running = False
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_w:
@@ -170,6 +187,7 @@ while running:
     screen.fill((0, 0, 0))
     fl_sprites.draw(screen)
     wall_sprites.draw(screen)
+    dot_sprites.draw(screen)
     pacman.draw()
     k += v * clock.tick() / 1000
     if k >= 30:
