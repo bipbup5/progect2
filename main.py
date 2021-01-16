@@ -152,6 +152,11 @@ class Ghosts:
         g_sprites.draw(screen)
 
     def update(self):
+        global running
+        for elem in pac_sprites:
+            if pygame.sprite.collide_mask(self.g_sprite, elem):
+                running = False
+
         if self.dir_g == 3:
             if int(self.row) == self.row:
                 if canMove(self.row - 1, self.col) and self.col % 1 == 0:
