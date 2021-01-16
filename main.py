@@ -10,6 +10,7 @@ left = 10
 dir = 0
 v = 270
 k = 0
+res = 0
 gameBoard = []
 clock = pygame.time.Clock()
 
@@ -84,6 +85,15 @@ class Pacman:
         #                    square // 4)
 
     def update(self):
+        global dot_sprites, res
+        if int(self.row) == self.row and int(self.col) == self.col:
+            if gameBoard[int(self.row)][int(self.col)] == 2:
+                gameBoard[int(self.row)][int(self.col)] = 0
+                for dot in dot_sprites:
+                    if dot.rect.x == self.row * square + left + 5 and\
+                            dot.rect.y == self.col * square + top + 5:
+                        dot_sprites.remove(dot)
+                        res += 1
         if dir == 3:
             if int(self.row) == self.row:
                 if canMove(self.row - 1, self.col) and self.col % 1 == 0:
@@ -194,3 +204,4 @@ while running:
         pacman.update()
         k = 0
     pygame.display.flip()
+    print(res)
