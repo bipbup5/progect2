@@ -43,6 +43,7 @@ pac_sprites = pygame.sprite.Group()
 dot_sprites = pygame.sprite.Group()
 g_sprites = pygame.sprite.Group()
 
+
 def load_image(name, colorkey=None):
     fullname = os.path.join('data', name)
     # если файл не существует, то выходим
@@ -63,18 +64,26 @@ def canMove(row, col):
 
 class Pacman:
     def __init__(self, row, col):
-        im = load_image('pacman.png')
-        im = pygame.transform.scale(im, (20, 20))
+        self.im = load_image('pacman.png')
+        self.im = pygame.transform.scale(self.im, (20, 20))
         self.row = row
         self.col = col
         self.dir = 0
         self.pac_sprite = pygame.sprite.Sprite()
         pac_sprites.add(self.pac_sprite)
-        self.pac_sprite.image = im
+        self.pac_sprite.image = self.im
         self.pac_sprite.rect = self.pac_sprite.image.get_rect()
         self.draw()
 
     def draw(self):
+        if dir == 0:
+            self.pac_sprite.image = pygame.transform.rotate(self.im, 90)
+        elif dir == 1:
+            self.pac_sprite.image = self.im
+        elif dir == 2:
+            self.pac_sprite.image = pygame.transform.flip(pygame.transform.rotate(self.im, 270), True, False)
+        elif dir == 3:
+            self.pac_sprite.image = pygame.transform.flip(pygame.transform.rotate(self.im, 180), False, True)
         self.pac_sprite.rect.x = self.row * square + square // 2 + left - 10
         self.pac_sprite.rect.y = self.col * square + square // 2 + top - 10
         pac_sprites.draw(screen)
@@ -122,6 +131,7 @@ class Pacman:
                     self.col -= 0.25
             else:
                 self.col -= 0.25
+
 
 class Ghosts:
     def __init__(self, row, col):
