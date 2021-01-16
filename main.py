@@ -8,7 +8,7 @@ square = 30
 top = 10
 left = 10
 dir = 0
-v = 120
+v = 360
 k = 0
 gameBoard = []
 clock = pygame.time.Clock()
@@ -41,6 +41,7 @@ screen = pygame.display.set_mode(size)
 
 wall_sprites = pygame.sprite.Group()
 fl_sprites = pygame.sprite.Group()
+pac_sprites = pygame.sprite.Group()
 
 
 def load_image(name, colorkey=None):
@@ -63,30 +64,55 @@ def canMove(row, col):
 
 class Pacman:
     def __init__(self, row, col):
+        im = load_image('pacman.png')
+        im = pygame.transform.scale(im, (20, 20))
         self.row = row
         self.col = col
         self.dir = 0
+        self.pac_sprite = pygame.sprite.Sprite()
+        pac_sprites.add(self.pac_sprite)
+        self.pac_sprite.image = im
+        self.pac_sprite.rect = self.pac_sprite.image.get_rect()
+        self.draw()
 
     def draw(self):
-        pygame.draw.circle(screen, (255, 255, 255), (self.row * square + square // 2 + left, self.col * square + square // 2 + top),
-                           square // 4)
+        self.pac_sprite.rect.x = self.row * square + square // 2 + left - 10
+        self.pac_sprite.rect.y = self.col * square + square // 2 + top - 10
+        pac_sprites.draw(screen)
+        # pygame.draw.circle(screen, (255, 255, 255), (self.row * square + square // 2 + left, self.col * square + square // 2 + top),
+        #                    square // 4)
 
     def update(self):
         if dir == 3:
-            if canMove(self.row - 1, self.col):
-                self.row -= 1
+            if int(self.row) == self.row:
+                if canMove(self.row - 1, self.col) and self.col % 1 == 0:
+                    self.row -= 0.25
+                    return
+            else:
+                self.row -= 0.25
                 return
         elif dir == 2:
-            if canMove(self.row, self.col + 1):
-                self.col += 1
+            if int(self.col) == self.col:
+                if canMove(self.row, self.col + 1) and self.row % 1.0 == 0:
+                    self.col += 0.25
+                    return
+            else:
+                self.col += 0.25
                 return
         elif dir == 1:
-            if canMove(self.row + 1, self.col):
-                self.row += 1
+            if int(self.row) == self.row:
+                if canMove(self.row + 1, self.col) and self.col % 1.0 == 0:
+                    self.row += 0.25
+                    return
+            else:
+                self.row += 0.25
                 return
         elif dir == 0:
-            if canMove(self.row, self.col - 1):
-                self.col -= 1
+            if int(self.col) == self.col:
+                if canMove(self.row, self.col - 1) and self.row % 1.0 == 0:
+                    self.col -= 0.25
+            else:
+                self.col -= 0.25
 
 
 class Game:
